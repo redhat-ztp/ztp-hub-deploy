@@ -1,0 +1,62 @@
+---
+- name: Install needed packages
+  yum:
+    name:
+      - python3-pip
+      - openssl-devel
+      - make
+      - podman
+      - skopeo
+      - jq
+      - git
+    state: present
+
+- name: Create temporary directory
+  tempfile:
+    state: directory
+  register: temporary_directory
+
+- name: Install golang
+  ansible.builtin.shell:
+    cmd: "{{ item }}"
+  args:
+    creates: /usr/local/go
+  with_items:
+    - "curl {{ golang_url | default('https://dl.google.com/go/go1.13.6.linux-amd64.tar.gz') }} -o {{ temporary_directory.path }}/go.tar.gz"
+    - "tar -zxvf {{ temporary_directory.path }}/go.tar.gz -C /usr/local/"
+    - "echo 'export GOROOT=/usr/local/go' | tee -a /etc/profile"
+    - "echo 'export PATH=$PATH:/usr/local/go/bin' | tee -a /etc/profile"
+
+- name: Create bridge on primary nic
+  ansible.builtin.shell:
+    cmd: "{{ item }}"
+  with_items:
+  - "nmcli con add type bridge con-name {{ provisioner_cluster_network }} ifname {{ provisioner_cluster_network }}"
+  - "nmcli con modify {{ provisioner_cluster_network }} bridge.stp no"
+  - "nmcli con add type bridge-slave con-name {{provisioner_cluster_network }}-slave ifname {{ bridge_nic }} master {{ provisioner_cluster_network }}"
+  - "nmcli con modify {{ provisioner_cluster_network }} ipv4.method disabled ipv6.method manual ipv6.addresses {{ provisioner_ip }}/{{ provisioner_mask }}" 
+  - "nmcli con up {{ provisioner_cluster_network }}"
+  become: yes
+
+- name: Copy template to temporary path
+  template:
+    src: "templates/ipv6.hostsfile.j2"
+    dest: "/etc/dnsmasq.d/ipv6.hostsfile"
+
+- name: Install and configure dnsmasq
+  include_role:
+    name: robertdebock.dnsmasq
+  vars:
+    dnsmasq_conf_file: "/etc/dnsmasq.d/ipv6.hostsfile"
+    dnsmasq_strict_order: yes
+    dnsmasq_user: dnsmasq
+    dnsmasq_group: dnsmasq
+    dnsmasq_interfaces:
+    - name: "{{ provisioner_cluster_network }}"
+    dnsmasq_except_interface: lo
+    dnsmasq_listen_addresses:
+    - name: "{{ provisioner_ip }}"
+    dnsmasq_bind_interfaces: yes
+    dnsmasq_expand_hosts: yes
+    dnsmasq_enable_ra: yes
+    dnsmasq_dhcp_authoritative: yes
