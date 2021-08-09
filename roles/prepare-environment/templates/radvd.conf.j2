@@ -1,0 +1,17 @@
+interface {{ provisioner_cluster_network }}
+{
+        AdvManagedFlag on;
+	AdvDefaultPreference high;
+        prefix {{ provisioner_cidr }}
+        {
+		AdvValidLifetime 2592000;
+		AdvPreferredLifetime 604800;
+                AdvAutonomous off;
+                AdvRouterAddr on;
+        };
+	route ::/0 {
+		AdvRouteLifetime 1800;
+		AdvRoutePreference high;
+	};
+};
+

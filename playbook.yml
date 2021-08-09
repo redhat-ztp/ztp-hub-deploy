@@ -7,4 +7,7 @@
     - role: prepare-environment
       tags: prepare-environment
       become: yes
+    - role: create-provisioner-cluster
+      tags: create-provisioner-cluster
+      become: yes
 

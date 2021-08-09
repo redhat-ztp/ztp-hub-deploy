@@ -9,6 +9,9 @@
       - skopeo
       - jq
       - git
+      - libvirt
+      - libvirt-daemon-driver-qemu
+      - qemu-kvm
     state: present
 
 - name: Create temporary directory
@@ -27,18 +30,45 @@
     - "echo 'export GOROOT=/usr/local/go' | tee -a /etc/profile"
     - "echo 'export PATH=$PATH:/usr/local/go/bin' | tee -a /etc/profile"
 
-- name: Create bridge on primary nic
-  ansible.builtin.shell:
-    cmd: "{{ item }}"
-  with_items:
-  - "nmcli con add type bridge con-name {{ provisioner_cluster_network }} ifname {{ provisioner_cluster_network }}"
-  - "nmcli con modify {{ provisioner_cluster_network }} bridge.stp no"
-  - "nmcli con add type bridge-slave con-name {{provisioner_cluster_network }}-slave ifname {{ bridge_nic }} master {{ provisioner_cluster_network }}"
-  - "nmcli con modify {{ provisioner_cluster_network }} ipv4.method disabled ipv6.method manual ipv6.addresses {{ provisioner_ip }}/{{ provisioner_mask }}" 
-  - "nmcli con up {{ provisioner_cluster_network }}"
+- name: create bridge interface
+  community.general.nmcli:
+    conn_name: "{{ provisioner_cluster_network }}"
+    ifname: "{{ provisioner_cluster_network }}"
+    type: bridge
+    state: present
+    stp: no
+    method4: disabled
+    method6: manual
+    ip6: "{{ provisioner_ip }}/{{ provisioner_mask }}"
   become: yes
 
-- name: Copy template to temporary path
+- name: Remove previous connection if existed
+  ansible.builtin.shell:
+    cmd: "nmcli con del {{ bridge_nic }}"
+  become: true
+  ignore_errors: true
+
+- name: create bridge interface slave
+  community.general.nmcli:
+    conn_name: "{{ provisioner_cluster_network }}-slave"
+    ifname: "{{ bridge_nic }}"
+    type: bridge-slave
+    master: "{{ provisioner_cluster_network }}"
+    state: present
+    stp: no
+  become: yes
+
+- name: And activate it
+  ansible.builtin.shell:
+    cmd: "nmcli con up {{ provisioner_cluster_network }}"
+  become: yes
+
+- name: Copy radvd template to config
+  template:
+    src: "templates/radvd.conf.j2"
+    dest: "/etc/radvd.conf"
+
+- name: Copy template to config directory
   template:
     src: "templates/ipv6.hostsfile.j2"
     dest: "/etc/dnsmasq.d/ipv6.hostsfile"
@@ -60,7 +90,10 @@
     dnsmasq_expand_hosts: yes
     dnsmasq_enable_ra: yes
     dnsmasq_dhcp_authoritative: yes
-
+    dnsmasq_dhcp_ranges:
+    - from: "{{ provisioner_dnsmasq_from }}"
+      until: "{{ provisioner_dnsmasq_to }}"
+      leasetime: 12h
 - name: Add IP address of all needed hosts
   lineinfile:
     dest: /etc/hosts
@@ -78,7 +111,34 @@
   with_items:
     - { name: "api-int.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_api_ip }}" }
     - { name: "api.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_api_ip }}" }
-    - { name: "{{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_ingress_ip }}" }
+    - { name: "{{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_hosts['mirror'].ipv6 }}" }
     - { name: "console-openshift-console.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_ingress_ip }}" }
     - { name: "oauth-openshift.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_ingress_ip }}" }
     - { name: "multicloud-console.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_ingress_ip }}" }
+
+- name: Enable Copr repository
+  command:
+      cmd: dnf copr enable -y karmab/kcli 
+      creates: /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:karmab:kcli.repo
+        
+- name: Install kcli package
+  yum:
+    name:
+      - kcli
+    state: latest
+
+- name: Configure ipv6 sysctl settings
+  sysctl:
+    name: net.ipv6.conf.all.accept_ra
+    value: 2
+    state: present
+
+- name: Configure libvirtd
+  ansible.builtin.shell:
+    cmd: " usermod -aG qemu,libvirt $(id -un)"
+  become: true
+
+- name: Start libvirtd
+  ansible.builtin.service:
+    name: libvirtd
+    state: started
