@@ -1,0 +1,4 @@
+{% for key, host in provisioner_hosts.items() %}
+dhcp-host=id:00:03:00:01:{{ host.mac }},{{ host.hostname }},[{{ host.ipv6 }}]
+{% endfor %}
+

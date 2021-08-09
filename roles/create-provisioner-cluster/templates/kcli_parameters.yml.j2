@@ -1,0 +1,62 @@
+provisioning_enable: false
+{% if provisioner_cluster_channel is defined and provisioner_cluster_channel|length > 0 %}
+version: {{ provisioner_cluster_channel }}
+{% endif %}
+pool: {{ provisioner_cluster_pool | default('default') }}
+dualstack: false
+disconnected: true
+{% if provisioner_cluster_tag is defined and provisioner_cluster_tag|length > 0 %}
+tag: "{{ provisioner_cluster_tag }}"
+{% endif %}
+virtual_masters: true
+virtual_workers: false
+launch_steps: true 
+deploy_openshift: true
+extra_disks: [20, 20]
+cluster: {{ provisioner_cluster_name }}
+domain: {{ provisioner_cluster_domain }}
+uefi_legacy: true
+patch_rhcos_image: true
+{% if provisioner_cluster_openshift_image is defined and provisioner_cluster_openshift_image|length > 0 %}
+openshift_image: {{ provisioner_cluster_openshift_image }}
+{% endif %}
+baremetal_net: {{ provisioner_cluster_network }}
+baremetal_macs:
+- {{ provisioner_hosts['master-0']['mac'] | default('aa:aa:aa:aa:bb:01') }}
+- {{ provisioner_hosts['master-1']['mac'] | default('aa:aa:aa:aa:bb:01') }}
+- {{ provisioner_hosts['master-2']['mac'] | default('aa:aa:aa:aa:bb:01') }}
+installer_mac: {{ provisioner_hosts['bootstrap']['mac'] | default('aa:aa:aa:aa:bb:04') }}
+virtual_masters_memory: {{ virtual_masters_memory | default('20480') }}
+virtual_masters_numcpus: {{ virtual_masters_numcpus | default('16') }}
+virtual_workers_deploy: false
+disk_size: {{ virtual_masters_disk_size | default('80') }}
+baremetal_cidr: {{ provisioner_cidr }}
+api_ip: {{ provisioner_api_ip }}
+ingress_ip: {{ provisioner_ingress_ip }}
+ipmi_user: root
+ipmi_password: calvin
+disconnected_reuse: true
+disconnected_origin: quay.io
+disconnected_operators: ["performance-addon-operator", "ptp-operator", "local-storage-operator", "acm-operator", "gitea-operator", "sriov-network-operator", "cluster-logging", "gitops-operator"]
+ipv6: true
+ntp: true
+{% if provisioner_cluster_ntp_server is defined and provisioner_cluster_ntp_server|length > 0 %}
+ntp_server: {{ provisioner_cluster_ntp_server }}
+{% endif %}
+vmrules:
+- {{ provisioner_cluster_name }}-installer:
+    disks:
+      - {{ installer_disk_size | default('220') }}
+    memory: {{ installer_memory | default('16384') }}
+    domain: {{ provisioner_cluster_domain }}
+    nets:
+     - name: {{ provisioner_cluster_network }}
+       ipv6: true
+       mac: {{ provisioner_hosts['mirror']['mac'] }}
+     - default
+    cmds:
+    - nmcli conn mod 'System eth0' ipv6.dhcp-iaid mac
+    - nmcli conn mod 'System eth0' ipv6.dhcp-duid ll
+    - nmcli conn mod 'System eth0' ipv4.addresses ""
+    - hostnamectl set-hostname '{{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}'
+    - nmcli conn up 'System eth0'
