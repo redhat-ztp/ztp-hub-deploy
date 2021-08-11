@@ -43,6 +43,7 @@ ntp: true
 {% if provisioner_cluster_ntp_server is defined and provisioner_cluster_ntp_server|length > 0 %}
 ntp_server: {{ provisioner_cluster_ntp_server }}
 {% endif %}
+
 vmrules:
 - {{ provisioner_cluster_name }}-installer:
     disks:
@@ -60,3 +61,20 @@ vmrules:
     - nmcli conn mod 'System eth0' ipv4.addresses ""
     - hostnamectl set-hostname '{{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}'
     - nmcli conn up 'System eth0'
+{% if provisioner_proxy %}
+    - echo "proxy={{ provisioner_proxy }}" >> /etc/dnf/dnf.conf
+    - touch /etc/profile.d/http_proxy.sh
+    - echo "export http_proxy={{ provisioner_proxy }}" >> /etc/profile.d/http_proxy.sh
+    - echo "export https_proxy={{ provisioner_proxy }}" >> /etc/profile.d/http_proxy.sh
+    - source /etc/profile.d/http_proxy.sh
+    files:
+    - path: /etc/containers.conf
+      content: |
+        [containers]
+        http_proxy = true
+        env = [
+          http_proxy={{ provisioner_proxy }}
+          https_proxy={{ provisioner_proxy }}
+        ]
+        EOF
+{% endif %}

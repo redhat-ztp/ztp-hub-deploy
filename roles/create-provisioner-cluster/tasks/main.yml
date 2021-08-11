@@ -54,19 +54,23 @@
     cmd: "kcli create plan --paramfile {{ temporary_path }}//kcli_{{ provisioner_cluster_name }}/kcli_parameters.yml plan_{{ provisioner_cluster_name }}"
     chdir: "{{ temporary_path }}/kcli_{{ provisioner_cluster_name }}"
 
-- name: Get IP of the registry vm
+- name: Wait until we get some IP
   shell: "kcli info vm {{ provisioner_cluster_name }}-installer -f ip -v"
   register: disconnecter_vm
   retries: 5
   delay: 30
   until: disconnecter_vm.stdout|ipaddr('bool') == True
 
-- name: Add entry into /etc/hosts
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    regexp: "^(.*) {{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_domain }}$"
-    line: "{{ disconnecter_vm.stdout }} {{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_domain }}"
-  when: disconnecter_vm.stdout|ipaddr('bool') == True
+- name: Wait for ssh to be available
+  wait_for:
+    port: 22
+    host: "{{ disconnecter_vm.stdout }}"
+    delay: 30
+    timeout: 300
+
+- name: Wait until cert is present
+  ansible.builtin.shell:
+    cmd: "kcli ssh root@{{ provisioner_cluster_name }}-installer 'while [ ! -f /opt/registry/certs/domain.crt ]; do sleep 30; done'"
 
 - name: Copy certificate to trusted certs path
   shell: "kcli scp root@{{ provisioner_cluster_name }}-installer:/opt/registry/certs/domain.crt /etc/pki/ca-trust/source/anchors/"
