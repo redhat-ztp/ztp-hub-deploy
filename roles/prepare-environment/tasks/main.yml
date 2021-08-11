@@ -12,6 +12,7 @@
       - libvirt
       - libvirt-daemon-driver-qemu
       - qemu-kvm
+      - chrony
     state: present
 
 - name: Create temporary directory
@@ -42,26 +43,18 @@
     ip6: "{{ provisioner_ip }}/{{ provisioner_mask }}"
   become: yes
 
-- name: Remove previous connection if existed
-  ansible.builtin.shell:
-    cmd: "nmcli con del {{ bridge_nic }}"
-  become: true
-  ignore_errors: true
-
 - name: create bridge interface slave
-  community.general.nmcli:
-    conn_name: "{{ provisioner_cluster_network }}-slave"
-    ifname: "{{ bridge_nic }}"
-    type: bridge-slave
-    master: "{{ provisioner_cluster_network }}"
-    state: present
-    stp: no
+  ansible.builtin.shell:
+    cmd: "nmcli con modify {{ bridge_nic }} master {{ provisioner_cluster_network }} slave-type bridge"
   become: yes
 
 - name: And activate it
   ansible.builtin.shell:
-    cmd: "nmcli con up {{ provisioner_cluster_network }}"
+    cmd: "nmcli con up {{ item }}"
   become: yes
+  with_items:
+  - "{{ bridge_nic }}"
+  - "{{ provisioner_cluster_network }}"
 
 - name: Copy radvd template to config
   template:
@@ -142,3 +135,21 @@
   ansible.builtin.service:
     name: libvirtd
     state: started
+
+- name: Disable firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+
+- name: Setup chrony as server
+  template:
+    src: templates/chrony.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Restart chronyd
+  ansible.builtin.service:
+    name: chronyd
+    state: restarted
