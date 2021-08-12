@@ -37,7 +37,7 @@ ipmi_user: root
 ipmi_password: calvin
 disconnected_reuse: true
 disconnected_origin: quay.io
-disconnected_operators: ["performance-addon-operator", "ptp-operator", "local-storage-operator", "acm-operator", "gitea-operator", "sriov-network-operator", "cluster-logging", "gitops-operator"]
+disconnected_operators: ["performance-addon-operator", "ptp-operator", "local-storage-operator", "advanced-cluster-management", "gitea-operator", "sriov-network-operator", "cluster-logging", "gitops-operator"]
 ipv6: true
 ntp: true
 {% if provisioner_cluster_ntp_server is defined and provisioner_cluster_ntp_server|length > 0 %}
@@ -63,10 +63,6 @@ vmrules:
     - nmcli conn up 'System eth0'
 {% if provisioner_proxy %}
     - echo "proxy={{ provisioner_proxy }}" >> /etc/dnf/dnf.conf
-    - touch /etc/profile.d/http_proxy.sh
-    - echo "export http_proxy={{ provisioner_proxy }}" >> /etc/profile.d/http_proxy.sh
-    - echo "export https_proxy={{ provisioner_proxy }}" >> /etc/profile.d/http_proxy.sh
-    - source /etc/profile.d/http_proxy.sh
     files:
     - path: /etc/containers.conf
       content: |
