@@ -37,7 +37,8 @@ ipmi_user: root
 ipmi_password: calvin
 disconnected_reuse: true
 disconnected_origin: quay.io
-disconnected_operators: ["performance-addon-operator", "ptp-operator", "local-storage-operator", "advanced-cluster-management", "gitea-operator", "sriov-network-operator", "cluster-logging", "gitops-operator"]
+disconnected_operators: "{{ disconnected_operators }}"
+disconnected_operators_deploy_after_openshift: true
 ipv6: true
 ntp: true
 {% if provisioner_cluster_ntp_server is defined and provisioner_cluster_ntp_server|length > 0 %}
