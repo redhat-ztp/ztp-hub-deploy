@@ -1,0 +1,42 @@
+all:
+  vars:
+    # Pull secret must include all necessary auth, including registry.redhat.io
+    pull_secret: '{"auths": {"registry.access.redhat.com": { "auth": "NTEwMDY3Njh8dWhjLTFFQ21TN2pvMm1yWHJ6bUYxR3JLWXpKQkU2cTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTFaRFppWVRkbE9UQXpaVGcwTWpFd1lUUXhZekF6T0ROall6SmlOV1EwWkNKOS5vTlQtUFg0dElFOWNtN0RVbU1mVDNJM1F2dUI0YnBXRE9UT283UEFNVTFqX3BRUnZlSG1jRjZ4MFRXYm0xZXRhLTNTZWFmQlZlakx4RUxVWW9PUkUzNFVIQ1E1ZGU2RmlObGpFcnI3cTE1VWRhZHpabDhaQUd2NE1UOUR4aXE4Y3F5d1FaQTF3ODd5enBmQlNyOXRmZTUyVC1iaTFlM1RFaHdqbmVWa0VQRWxHczctM2xZS2trM1VKSDRHNjFGWlNnVnhrNkRPT0RzeXR3Y1ZabEdfNzlPZHA2SVFScTJ6SVpEeWxaYU5RTXBjeDNCVTB0bGc4WnE0QjlkaWQ0U2xxNjNzNGY3R1dPWjZxRWZqY3NQLVlzMV83LUMzY2dFWFBqNW51dFdySmt0RVYxZ21FeTB0azhBNXN1bFN1RW9xVUxTWTFwMGE3NWxXcVEtbWhpbTNhRk51TzhFanNpZUNnRk5tNndYMzdkRWVkR1V5Zk5CZG5xLTdkS1ZUMkNFazZOd3hMLUMyTUt1WGhhMmdQdkhpQ05MT0JvUnRtcUlPOXNsZFItTlVpUjNVMl9LWDItd19JMEhnZlpVY1QwdkRoQVkxNzBCb3pDd0haaGw3RkFjS3U2WmxjbGtyeTVFMnpNOGF2M1A5aC1DWnpaVnBUQ1hqLWJJUGVSX2pFRm1sbG9CNWxpeXpvT1RnRDRVSzlrcmpfUHdZWXpOSG5oOUlaVWpNbHlmazdqUHFHM2hZc1VyZEpNUW05NDJJMVhQM0liVGFKcXBIeHdYdmF3VWZWMTZ3U3dLODZfNy1pLXZodnZYdVJjVWZ6dHI0LWo3c2JOQ0wwNEpQcUtnQnV1U2tfVnZxekV6YnNZb3REekEtejIyZEZ5SUJHR2pnSE1VRnJRbmlkcmkzcEwwQQ==" }, "cloud.openshift.com": {"auth": "b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K21hdmF6cXVlcmVkaGF0Y29tMWVjbXM3am8ybXJ4cnptZjFncmt5empiZTZxOk9YMVhUUUlCV0U4SUdCODlWQ09SMVVTNk1GT1VaMkcxMkVZRzJQQUlWV0FWUlhJUVkxV0U2Uk41SzNBN09FMTk="}, "quay.io": {"auth": "b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K2VyY29oZW4xd2Jhc2prbXJpOWx4c2ZqdDVlNzE1eXhwcWI6NlA0NzJBSzhWWEJHUDZQMVlHOVlNV0VWSFVGQlE2TlZDSE9TQUlDWTUwNEc4Q1Y3MURQM0lGMVlTNkk1NlVQUQ=="}, "quay.io:443": {"auth": "b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K2VyY29oZW4xd2Jhc2prbXJpOWx4c2ZqdDVlNzE1eXhwcWI6NlA0NzJBSzhWWEJHUDZQMVlHOVlNV0VWSFVGQlE2TlZDSE9TQUlDWTUwNEc4Q1Y3MURQM0lGMVlTNkk1NlVQUQ=="}, "registry.connect.redhat.com": {"auth": "NTEwMDY3Njh8dWhjLTFFQ21TN2pvMm1yWHJ6bUYxR3JLWXpKQkU2cTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTFaRFppWVRkbE9UQXpaVGcwTWpFd1lUUXhZekF6T0ROall6SmlOV1EwWkNKOS5vTlQtUFg0dElFOWNtN0RVbU1mVDNJM1F2dUI0YnBXRE9UT283UEFNVTFqX3BRUnZlSG1jRjZ4MFRXYm0xZXRhLTNTZWFmQlZlakx4RUxVWW9PUkUzNFVIQ1E1ZGU2RmlObGpFcnI3cTE1VWRhZHpabDhaQUd2NE1UOUR4aXE4Y3F5d1FaQTF3ODd5enBmQlNyOXRmZTUyVC1iaTFlM1RFaHdqbmVWa0VQRWxHczctM2xZS2trM1VKSDRHNjFGWlNnVnhrNkRPT0RzeXR3Y1ZabEdfNzlPZHA2SVFScTJ6SVpEeWxaYU5RTXBjeDNCVTB0bGc4WnE0QjlkaWQ0U2xxNjNzNGY3R1dPWjZxRWZqY3NQLVlzMV83LUMzY2dFWFBqNW51dFdySmt0RVYxZ21FeTB0azhBNXN1bFN1RW9xVUxTWTFwMGE3NWxXcVEtbWhpbTNhRk51TzhFanNpZUNnRk5tNndYMzdkRWVkR1V5Zk5CZG5xLTdkS1ZUMkNFazZOd3hMLUMyTUt1WGhhMmdQdkhpQ05MT0JvUnRtcUlPOXNsZFItTlVpUjNVMl9LWDItd19JMEhnZlpVY1QwdkRoQVkxNzBCb3pDd0haaGw3RkFjS3U2WmxjbGtyeTVFMnpNOGF2M1A5aC1DWnpaVnBUQ1hqLWJJUGVSX2pFRm1sbG9CNWxpeXpvT1RnRDRVSzlrcmpfUHdZWXpOSG5oOUlaVWpNbHlmazdqUHFHM2hZc1VyZEpNUW05NDJJMVhQM0liVGFKcXBIeHdYdmF3VWZWMTZ3U3dLODZfNy1pLXZodnZYdVJjVWZ6dHI0LWo3c2JOQ0wwNEpQcUtnQnV1U2tfVnZxekV6YnNZb3REekEtejIyZEZ5SUJHR2pnSE1VRnJRbmlkcmkzcEwwQQ=="}, "registry.redhat.io": {"auth": "NTEwMDY3Njh8dWhjLTFFQ21TN2pvMm1yWHJ6bUYxR3JLWXpKQkU2cTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTFaRFppWVRkbE9UQXpaVGcwTWpFd1lUUXhZekF6T0ROall6SmlOV1EwWkNKOS5vTlQtUFg0dElFOWNtN0RVbU1mVDNJM1F2dUI0YnBXRE9UT283UEFNVTFqX3BRUnZlSG1jRjZ4MFRXYm0xZXRhLTNTZWFmQlZlakx4RUxVWW9PUkUzNFVIQ1E1ZGU2RmlObGpFcnI3cTE1VWRhZHpabDhaQUd2NE1UOUR4aXE4Y3F5d1FaQTF3ODd5enBmQlNyOXRmZTUyVC1iaTFlM1RFaHdqbmVWa0VQRWxHczctM2xZS2trM1VKSDRHNjFGWlNnVnhrNkRPT0RzeXR3Y1ZabEdfNzlPZHA2SVFScTJ6SVpEeWxaYU5RTXBjeDNCVTB0bGc4WnE0QjlkaWQ0U2xxNjNzNGY3R1dPWjZxRWZqY3NQLVlzMV83LUMzY2dFWFBqNW51dFdySmt0RVYxZ21FeTB0azhBNXN1bFN1RW9xVUxTWTFwMGE3NWxXcVEtbWhpbTNhRk51TzhFanNpZUNnRk5tNndYMzdkRWVkR1V5Zk5CZG5xLTdkS1ZUMkNFazZOd3hMLUMyTUt1WGhhMmdQdkhpQ05MT0JvUnRtcUlPOXNsZFItTlVpUjNVMl9LWDItd19JMEhnZlpVY1QwdkRoQVkxNzBCb3pDd0haaGw3RkFjS3U2WmxjbGtyeTVFMnpNOGF2M1A5aC1DWnpaVnBUQ1hqLWJJUGVSX2pFRm1sbG9CNWxpeXpvT1RnRDRVSzlrcmpfUHdZWXpOSG5oOUlaVWpNbHlmazdqUHFHM2hZc1VyZEpNUW05NDJJMVhQM0liVGFKcXBIeHdYdmF3VWZWMTZ3U3dLODZfNy1pLXZodnZYdVJjVWZ6dHI0LWo3c2JOQ0wwNEpQcUtnQnV1U2tfVnZxekV6YnNZb3REekEtejIyZEZ5SUJHR2pnSE1VRnJRbmlkcmkzcEwwQQ=="}, "registry.svc.ci.openshift.org": {"auth": "dXNlcjpzaGEyNTZ+NGNnUWd0bFBpSGtRdVV0cDBQUmw0bjBFUTBNM0pVQ09Ua1J2MkRpQ3M2QQ=="}, "registry.build01.ci.openshift.org": {"auth":"dXNlcjpzaGEyNTZ+SUs3LTkyUXhfRGZQRDVaVVdxenh4WVZMLVQxR3FqWXdlNlVtVkQ4dlBpbw=="}, "registry.ci.openshift.org": { "auth": "c3lzdGVtLXNlcnZpY2VhY2NvdW50LWNuZi1xZS1pbWFnZS1wdWxsZXI6ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNklrRndTekF0YjBaNGJXMUZURXRHTVMwMFVEa3djbEEwUTJWQlRUZERNMGRXUkZwdmJGOVllaTFEUW5NaWZRLmV5SnBjM01pT2lKcmRXSmxjbTVsZEdWekwzTmxjblpwWTJWaFkyTnZkVzUwSWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXVZVzFsYzNCaFkyVWlPaUpqYm1ZdGNXVWlMQ0pyZFdKbGNtNWxkR1Z6TG1sdkwzTmxjblpwWTJWaFkyTnZkVzUwTDNObFkzSmxkQzV1WVcxbElqb2lhVzFoWjJVdGNIVnNiR1Z5TFhSdmEyVnVMV3hpY1hKaUlpd2lhM1ZpWlhKdVpYUmxjeTVwYnk5elpYSjJhV05sWVdOamIzVnVkQzl6WlhKMmFXTmxMV0ZqWTI5MWJuUXVibUZ0WlNJNkltbHRZV2RsTFhCMWJHeGxjaUlzSW10MVltVnlibVYwWlhNdWFXOHZjMlZ5ZG1salpXRmpZMjkxYm5RdmMyVnlkbWxqWlMxaFkyTnZkVzUwTG5WcFpDSTZJbVpoWXpGbE16WTBMV1JsWldNdE5EVTFOaTFpTXpWakxUQTFOelJqTURnd1l6TTVOaUlzSW5OMVlpSTZJbk41YzNSbGJUcHpaWEoyYVdObFlXTmpiM1Z1ZERwamJtWXRjV1U2YVcxaFoyVXRjSFZzYkdWeUluMC55aldsOGEzS2dVVF9OZWtKQWV1VE8yRU1qRnc1YUZlVGNtcTRBN3NXU3ZFOEJHLUgzSzNkQzZ1MUUwSXFFU1hlUFliMWswWXFvMUVqai1tTWJXQ3pTREpyMDdzZnBwNlY2Tjc0dTNROGtYZWtqTnhZbkIwX0pBQWp1WjI1Qk1oUzJwamdxSjBxTEJBYm93amJPWERrWHZpR0RpSVpuanNKNWhfVGJiZXRsTW5wZlBFTy1vaUIyTUlZVjB4TzVmd0ZhOE42TFZBY0kzY25SOWxEMkdUdlBtRVN0YmN0ZDRPTTVjOFFTbGxvV19LNFQ2LTdhbWs2ZmpBM2ZFYTdRbl91MUxwNUxsSWpUTUtlZHRWbEg3VEdsUkU2SEFWcjcyWXBHS3VvcUZpTHlCY2lZUzd5ZkF4dDU0WTRkWUVtbHF1SW91QXBHRk1IWFFMalZoOXJydGlfOEE="}}}'
+    temporary_path: /tmp
+    installer_disk_size: 220
+    # provisioner cluster, just set it if you need to deploy a provisioner cluster
+    provisioner_cluster_name: cluster
+    provisioner_cluster_domain: testing.home
+    provisioner_cidr: "2620:52:0:1310::/64"
+    provisioner_api_ip: "2620:52:0:1310::21"
+    provisioner_ip: "2620:52:0:1310::2"
+    provisioner_dnsmasq_from: "2620:52:0:1310::3"
+    provisioner_dnsmasq_to: "2620:52:0:1310::20"
+    provisioner_mask: 64
+    provisioner_ingress_ip: "2620:52:0:1310::22"
+    provisioner_cluster_network: baremetal
+    bridge_nic: eno2
+    default_libvirt_range: 192.168.122.0/24
+    provisioner_proxy: http://[2620:52:0:1310::2]:3128
+    provisioner_cluster_ntp_server: "2620:52:0:1310::2"
+    #provisioner_cluster_openshift_image: quay.io/openshift-release-dev/ocp-release:4.8.0-x86_64
+    provisioner_cluster_openshift_image: registry.ci.openshift.org/ocp/release:4.9.0-0.nightly-2021-08-19-184748
+
+    # set it to a disk that has a minimum of 350gb, for mirroring
+    provisioner_cluster_libvirt_pool: /images2
+
+    # list of hosts with id, name and ipv6
+    provisioner_hosts: {
+'bootstrap': {'mac': 'aa:aa:aa:aa:bb:05', 'hostname': 'bootstrap.cluster.testing.home', 'ipv6':'2620:52:0:1310::15' },
+'mirror': {'mac': 'aa:aa:aa:aa:bb:04', 'hostname': 'cluster-installer.cluster.testing.home', 'ipv6':'2620:52:0:1310::14' },
+'master-0': {'mac': 'aa:aa:aa:aa:bb:01', 'hostname': 'master-0.cluster.testing.home', 'ipv6':'2620:52:0:1310::11' },
+'master-1': {'mac': 'aa:aa:aa:aa:bb:02', 'hostname': 'master-1.cluster.testing.home', 'ipv6':'2620:52:0:1310::12' },
+'master-2': {'mac': 'aa:aa:aa:aa:bb:03', 'hostname': 'master-2.cluster.testing.home', 'ipv6':'2620:52:0:1310::13' }
+}
+    disconnected_operators: "['performance-addon-operator', 'ptp-operator', 'local-storage-operator', 'advanced-cluster-management', 'gitea-operator', 'sriov-network-operator', 'cluster-logging', 'gitops-operator']"
+  children:
+    provisioner:
+      hosts:
+        192.168.112.21:
+
+
