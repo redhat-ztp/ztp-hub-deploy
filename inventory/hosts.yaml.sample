@@ -23,7 +23,7 @@ all:
     provisioner_cluster_openshift_image: registry.ci.openshift.org/ocp/release:4.9.0-0.nightly-2021-08-19-184748
 
     # set it to a disk that has a minimum of 350gb, for mirroring
-    provisioner_cluster_libvirt_pool: /images2
+    provisioner_cluster_libvirt_pool: /var/lib/libvirt/images
 
     # list of hosts with id, name and ipv6
     provisioner_hosts: {
