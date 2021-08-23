@@ -33,7 +33,7 @@ all:
 'master-1': {'mac': 'aa:aa:aa:aa:bb:02', 'hostname': 'master-1.cluster.testing.home', 'ipv6':'2620:52:0:1310::12' },
 'master-2': {'mac': 'aa:aa:aa:aa:bb:03', 'hostname': 'master-2.cluster.testing.home', 'ipv6':'2620:52:0:1310::13' }
 }
-    disconnected_operators: "['performance-addon-operator', 'ptp-operator', 'local-storage-operator', 'advanced-cluster-management', 'gitea-operator', 'sriov-network-operator', 'cluster-logging', 'gitops-operator']"
+    disconnected_operators: "['performance-addon-operator', 'ptp-operator', 'local-storage-operator', 'advanced-cluster-management', 'sriov-network-operator', 'cluster-logging', 'openshift-gitops-operator']"
   children:
     provisioner:
       hosts:
