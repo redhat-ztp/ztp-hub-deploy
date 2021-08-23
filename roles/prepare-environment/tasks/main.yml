@@ -91,7 +91,7 @@
   lineinfile:
     dest: /etc/hosts
     regexp: '.*{{ provisioner_hosts[item].hostname }}$'
-    line: "{{ provisioner_hosts[item].ipv6 }} {{ provisioner_hosts[item].hostname }}"
+    line: "{{ provisioner_hosts[item].ip }} {{ provisioner_hosts[item].hostname }}"
     state: present
   with_items: "{{ provisioner_hosts }}"
 
@@ -99,15 +99,15 @@
   lineinfile:
     dest: /etc/hosts
     regexp: '.*{{ item.name }}$'
-    line: "{{ item.ipv6 }} {{ item.name }}"
+    line: "{{ item.ip }} {{ item.name }}"
     state: present
   with_items:
-    - { name: "api-int.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_api_ip }}" }
-    - { name: "api.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_api_ip }}" }
-    - { name: "{{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_hosts['mirror'].ipv6 }}" }
-    - { name: "console-openshift-console.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_ingress_ip }}" }
-    - { name: "oauth-openshift.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_ingress_ip }}" }
-    - { name: "multicloud-console.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ipv6: "{{ provisioner_ingress_ip }}" }
+    - { name: "api-int.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ip: "{{ provisioner_api_ip }}" }
+    - { name: "api.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ip: "{{ provisioner_api_ip }}" }
+    - { name: "{{ provisioner_cluster_name }}-installer.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ip: "{{ provisioner_hosts['mirror'].ip }}" }
+    - { name: "console-openshift-console.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ip: "{{ provisioner_ingress_ip }}" }
+    - { name: "oauth-openshift.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ip: "{{ provisioner_ingress_ip }}" }
+    - { name: "multicloud-console.apps.{{ provisioner_cluster_name }}.{{ provisioner_cluster_domain }}", ip: "{{ provisioner_ingress_ip }}" }
 
 - name: Enable Copr repository
   command:
