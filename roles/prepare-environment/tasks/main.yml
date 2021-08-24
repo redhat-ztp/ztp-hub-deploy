@@ -71,6 +71,7 @@
     name: robertdebock.dnsmasq
   vars:
     dnsmasq_conf_file: "/etc/dnsmasq.d/ipv6.hostsfile"
+    dnsmasq_domain_needed: no
     dnsmasq_strict_order: yes
     dnsmasq_user: dnsmasq
     dnsmasq_group: dnsmasq
