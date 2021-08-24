@@ -23,8 +23,8 @@ openshift_image: {{ provisioner_cluster_openshift_image }}
 baremetal_net: {{ provisioner_cluster_network }}
 baremetal_macs:
 - {{ provisioner_hosts['master-0']['mac'] | default('aa:aa:aa:aa:bb:01') }}
-- {{ provisioner_hosts['master-1']['mac'] | default('aa:aa:aa:aa:bb:01') }}
-- {{ provisioner_hosts['master-2']['mac'] | default('aa:aa:aa:aa:bb:01') }}
+- {{ provisioner_hosts['master-1']['mac'] | default('aa:aa:aa:aa:bb:02') }}
+- {{ provisioner_hosts['master-2']['mac'] | default('aa:aa:aa:aa:bb:03') }}
 installer_mac: {{ provisioner_hosts['bootstrap']['mac'] | default('aa:aa:aa:aa:bb:04') }}
 virtual_masters_memory: {{ virtual_masters_memory | default('20480') }}
 virtual_masters_numcpus: {{ virtual_masters_numcpus | default('16') }}
