@@ -27,11 +27,11 @@ all:
 
     # list of hosts with id, name and ipv6
     provisioner_hosts: {
-'bootstrap': {'mac': 'aa:aa:aa:aa:bb:05', 'hostname': 'bootstrap.cluster.testing.home', 'ipv6':'2620:52:0:1310::15' },
-'mirror': {'mac': 'aa:aa:aa:aa:bb:04', 'hostname': 'cluster-installer.cluster.testing.home', 'ipv6':'2620:52:0:1310::14' },
-'master-0': {'mac': 'aa:aa:aa:aa:bb:01', 'hostname': 'master-0.cluster.testing.home', 'ipv6':'2620:52:0:1310::11' },
-'master-1': {'mac': 'aa:aa:aa:aa:bb:02', 'hostname': 'master-1.cluster.testing.home', 'ipv6':'2620:52:0:1310::12' },
-'master-2': {'mac': 'aa:aa:aa:aa:bb:03', 'hostname': 'master-2.cluster.testing.home', 'ipv6':'2620:52:0:1310::13' }
+'bootstrap': {'mac': 'aa:aa:aa:aa:bb:05', 'hostname': 'bootstrap.cluster.testing.home', 'ip':'2620:52:0:1310::15' },
+'mirror': {'mac': 'aa:aa:aa:aa:bb:04', 'hostname': 'cluster-installer.cluster.testing.home', 'ip':'2620:52:0:1310::14' },
+'master-0': {'mac': 'aa:aa:aa:aa:bb:01', 'hostname': 'master-0.cluster.testing.home', 'ip':'2620:52:0:1310::11' },
+'master-1': {'mac': 'aa:aa:aa:aa:bb:02', 'hostname': 'master-1.cluster.testing.home', 'ip':'2620:52:0:1310::12' },
+'master-2': {'mac': 'aa:aa:aa:aa:bb:03', 'hostname': 'master-2.cluster.testing.home', 'ip':'2620:52:0:1310::13' }
 }
     disconnected_operators: "['performance-addon-operator', 'ptp-operator', 'local-storage-operator', 'advanced-cluster-management', 'sriov-network-operator', 'cluster-logging', 'openshift-gitops-operator']"
   children:
